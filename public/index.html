@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en" manifest="cache.manifest">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="Buckeye Day Camp 2016">
+    <meta name="author" content="Eric Fosler-Lussier">
+    <title id="bdc_title">Buckeye Day Camp</title>
+
+    <link rel="stylesheet" 
+          href="assets/pkg/leaflet/leaflet.css" /> 
+    <link rel="stylesheet"
+	  href="bdc.css" />
+    <link rel="stylesheet" href="assets/pkg/bootstrap-3.3.6-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/pkg/bootstrap-select-1.10.0/dist/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="assets/pkg/font-awesome-4.6.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="assets/pkg/leaflet-locatecontrol/dist/L.Control.Locate.css" />
+    <link rel="stylesheel" href="assets/pkg/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css"/>
+    <!--<link rel="stylesheet" href="assets/leaflet-easyPrint/dist/easyPrint.css" />-->
+    <!--<link rel="stylesheet" href="assets/leaflet-extramarkers/dist/css/leaflet.extra-markers.min.css">-->
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+ 
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#" id="bdc_navbar_title">Buckeye Day Camp</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;"><i class="fa fa-question-circle" style="color: white"></i>&nbsp;&nbsp;About</a></li>
+<!--          <li class="dropdown">
+            <a id="stationDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe" style="color: white"></i>&nbsp;&nbsp;Find a Station <b class="caret"></b></a> 
+            <ul class="dropdown-menu">
+             <script> for(var i=1;i<=22;i++) {document.writeln('<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="highlightMarker2(\'click\','+i+'); return false;"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Station '+i+'</a></li>');} </script>
+
+            </ul>
+          </li>-->
+          <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#findStationModal').modal('show'); return false;"><i class="fa fa-globe" style="color: white"></i>&nbsp;&nbsp;Find a Station</a></li>
+          <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#scheduleModal').modal('show'); return false;"><i class="fa fa-clock-o" style="color: white"></i>&nbsp;&nbsp;Schedules</a></li>
+        </ul>
+      </div><!--/.navbar-collapse -->
+    </div>
+
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="aboutModalTitle">Buckeye District Day Camp</h4>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs" id="aboutTabs">
+              <li class="active"><a href="#campInfo" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;<span id="bdc_info">Camp Info</span></a></li>
+              <li><a href="#emergencySignals" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;<span id="bdc_emergency">Emergency Signals</span></a></li>
+              <!--<li><a href="#emergencyMap" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Emergency Map</a></li>-->
+              <!--<li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a></li>-->
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe"></i>&nbsp;<span id="bdc_downloads">Downloads</span> <b class="caret"></b></a>
+                <ul class="dropdown-menu" id="downloadsDropdown">
+		  <!-- downloads dropdown now programattically loaded, controlled by customize.js -->
+                </ul>
+              </li>
+            </ul>
+            <div class="tab-content" id="aboutTabsContent" style="padding-top: 10px;">
+              <div class="tab-pane fade active in" id="campInfo">
+		<!-- info message now prepended -->
+                <div class="panel panel-primary">
+                  <div class="panel-heading" id="staffTitleLine">Camp Executive Staff</div>
+                  <ul class="list-group" id="staffList">
+		    <!-- now inserted programmatically from staff variable -->
+                  </ul>
+                </div>
+                <i>Website design by Eric Fosler-Lussier</i>
+              </div>
+              <div class="tab-pane fade" id="emergencySignals">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">In case of emergencies, the following signals will be sounded:</div>
+                  <ul class="list-group">
+                    <li class="list-group-item"><a href="#" onclick="turnOnEmergencyLayer('thunder'); return false;">TWO LONG BLASTS: Thunder Storm/Lightning </a> - move to shelter indicated </li>
+                    <li class="list-group-item"><a href="#" onclick="turnOnEmergencyLayer('tornado'); return false;">THREE LONG BLASTS: Tornado Warning</a> - proceed to Amphitheater #1</li>
+                    <li class="list-group-item"><a href="#" onclick="turnOnEmergencyLayer('hazard'); return false;">FOUR LONG BLASTS: Hazardous Material on Rt. 23</a> - proceed to Exchange Lodge #2</li>
+                    <li class="list-group-item">ONE LONG, FOUR SHORT BLASTS: Missing scout - stay in place</li>
+                    <li class="list-group-item">ONE LONG BLAST: all clear</li>
+                  </ul>
+                </div>
+              </div>
+
+	      <!--
+              <div class="tab-pane fade" id="emergencyMap">
+                <div class="panel panel-primary">
+		  <img src="assets/img/EmergencyCampMap2015optimized.jpg" alt="Emergency Map" width="100%"/>
+                </div>
+              </div>
+	      -->
+              <div class="tab-pane fade" id="emergency-dir-tab">
+                <p>Click here for <a href="assets/pdf/emergency.pdf" target="_blank">the Emergency Plan Document.</a></p>
+              </div>
+              <div class="tab-pane fade" id="infopacket-guide-tab">
+                <p>Click here for <a href="assets/pdf/infopacket.pdf" target="_blank">the Camp Information Packet.</a></p>
+              </div>
+              <div class="tab-pane fade" id="packing-list-tab">
+                <p>Click here for <a href="assets/pdf/packinglist.pdf" target="_blank">a suggested packing list.</a></p>
+              </div>
+              <div class="tab-pane fade" id="walker-guide-tab">
+                <p>Click here for <a href="assets/pdf/walkerguide.pdf" target="_blank">the Camp Walker Guide.</a></p>
+              </div>
+              <div class="tab-pane fade" id="station-rotation-tab">
+                <p>Click here for <a href="assets/pdf/stationrotation.pdf" target="_blank">the Station Rotation Schedule.</a></p> <p>If you would like a spreadsheet that gives stations by group and groups by station, <a href="assets/pdf/StationRotation.xlsx" target="_blank">download this Excel workbook.</a></p>
+              </div>
+              <div class="tab-pane fade" id="lunch-preorder-tab">
+                <p>Click here for <a href="assets/pdf/lunchinvite.pdf" target="_blank">the Friday Lunch Pre-Order Form.</a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="findStationModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id='findModalTitle'>Buckeye District Day Camp: Find a Station</h4>
+          </div>
+          <div class="modal-body">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Select a station to locate it on the map</div>
+	      <select class="selectpicker" id="StationSelect">
+		<option> </option>
+		<!-- options added in js -->
+	      </select>
+
+            </div>
+          </div>          
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id='findModalTitle'>Buckeye District Day Camp: Schedule</h4>
+          </div>
+          <div class="modal-body">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Select a den name to show the schedule</div>
+	      <select class="selectpicker" id="ScheduleSelect">
+		<option value='-1'> </option>
+		<!-- options added in js -->
+	      </select>
+	      <div id='ScheduleList'></div>
+            </div>
+          </div>          
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+    <div class="modal fade" id="stationInfoModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Buckeye District Day Camp 2016: Take Flight! Station Information</h4>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs" id="siTabs">
+              <li class="active"><a href="#siOverview" data-toggle="tab">Overview</a></li>
+             <script> for(var i=1;i<=22;i++) {document.writeln('<li><a href="#siTab'+i+'" data-toggle="tab"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Station '+i+'</a></li>');} </script>
+            </ul>
+            <div class="tab-content" id="siContent" style="padding-top: 10px;">
+              <div class="tab-pane fade active in" id="siOverview">
+		<p> Select a station from the tab above to see the curriculum for the station. </p>
+              </div>
+
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="map"></div>
+
+    <!--<script src="assets/js/jquery-1.11.0.min.js"></script>-->
+    <script src="assets/js/jquery-2.2.4.min.js"></script>
+
+    <script src="assets/pkg/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <script src="assets/pkg/bootstrap-select-1.10.0/dist/js/bootstrap-select.min.js"></script>
+    <!--<script src="assets/typeahead-0.10.2/typeahead.bundle.min.js"></script>-->
+    <!--<script src="assets/handlebars-1.3.0/handlebars.js"></script>-->
+    <!--<script src="assets/list-1.1.1/list.min.js"></script>-->
+    <script src="assets/pkg/leaflet/leaflet.js"></script>
+    <script src="assets/pkg/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.js"></script>
+    <!--<script src="assets/leaflet-activearea/L.activearea.js"></script>
+    <script src="assets/leaflet-sidebar-0.1.5/L.Control.Sidebar.js"></script>
+    <script src="assets/leaflet-markercluster-0.4.0/leaflet.markercluster.js"></script>-->
+    <script src="assets/pkg/leaflet-locatecontrol/dist/L.Control.Locate.min.js"></script>
+    <!--<script src="assets/leaflet-plotter/leaflet.plotter.js"></script>-->
+    <!--<script src="assets/leaflet-polylinedecorator/leaflet.polylineDecorator.js"></script>-->
+    <!--<script src="assets/leaflet-extramarkers/dist/js/leaflet.extra-markers.min.js">-->
+    <!--<script src="assets/leaflet-easyPrint/dist/leaflet.easyPrint.js"></script>-->
+    <script src="assets/js/download.js"></script>
+    <script src="assets/js/customize.js"></script>
+    <script src="assets/js/bdc2015.js"></script>
+
+ 
+
+
+</body>
+</html>
