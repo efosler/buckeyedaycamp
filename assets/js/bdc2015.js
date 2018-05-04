@@ -24,7 +24,7 @@ var iconWater=L.divIcon({className:'div-icon-blue', html: "<i class='fa fa-tint 
 var iconFirstAid=L.divIcon({className:'div-icon-red', html: "<i class='fa fa-medkit icon-rest'></i>", iconSize: iconSize});
 var iconOffice=L.divIcon({className:'div-icon-blue', html: "<i class='fa fa-info icon-rest'></i>", iconSize: iconSize});
 var iconFlag=L.divIcon({className:'div-icon-blue', html: "<i class='fa fa-flag icon-rest'></i>", iconSize: iconSize});
-var iconRocket=L.divIcon({className:'div-icon-blue', html: "<i class='fa fa-rocket icon-rest'></i>", iconSize: iconSize});
+var iconCar=L.divIcon({className:'div-icon-blue', html: "<i class='fa fa-car icon-rest'></i>", iconSize: iconSize});
 var iconTradingPost=L.divIcon({className:'div-icon-green', html: "<i class='fa fa-shopping-basket icon-rest'></i>", iconSize: iconSize});
 var iconTruck=L.divIcon({className:'div-icon-green', html: "<i class='fa fa-truck icon-rest'></i>", iconSize: iconSize});
 
@@ -355,7 +355,7 @@ function iconType(markertype) {
     } else if (markertype == "flags") {
 	return [iconFlag,"Check-In Location&nbsp;&nbsp;&nbsp;&nbsp;"];
     } else if (markertype == "dropoff") {
-	return [iconRocket,"Drop-off point&nbsp;&nbsp;&nbsp;&nbsp;"];
+	return [iconCar,"Drop-off point&nbsp;&nbsp;&nbsp;&nbsp;"];
     } else if (markertype == "tradingpost") {
 	return [iconTradingPost,"Trading Post&nbsp;&nbsp;&nbsp;&nbsp;"];
     } else if (markertype == "truck") {
@@ -568,6 +568,8 @@ function generateSchedule(denNumber) {
     if (denNumber < 0) return "";
 
     var slotNumber=denNumber;
+    //  In 2016, we shifted the schedules to keep Tigers from creeking on day 1 (=true)
+    //  In 2017, we didn't do that. = false
     var useShiftedSchedule=true;    
     if (useShiftedSchedule) {
 	var nDens=denNames.length;
